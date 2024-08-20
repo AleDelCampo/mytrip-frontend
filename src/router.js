@@ -12,7 +12,8 @@ const routes = [
     { path: '/dashboard', component: Dashboard },
     { path: '/stops', component: Stops },
     { path: '/trips', component: Trips },
-    { path: '/trips/:id', component: TripShow, name: 'trip-show' }
+    { path: '/trips/:id', component: TripShow, name: 'TripShow' },
+    
 ];
 
 const router = createRouter({

@@ -1,5 +1,4 @@
 <script setup>
-import Home from './components/Home.vue'
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
 
@@ -7,7 +6,7 @@ import Footer from './components/Footer.vue';
 
 <template>
   <Navbar></Navbar>
-  <Home/>
+  <router-view></router-view>
   <Footer></Footer>
 </template>
 
