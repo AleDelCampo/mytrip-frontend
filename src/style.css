@@ -3,3 +3,19 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+@font-face {
+    font-family: 'Countryside';
+    src: url('/fonts/Countryside-YdKj.ttf') format('truetype'),
+        url('/fonts/CountrysideTwo-r9WO.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.jumbotron {
+    font-family: 'Countryside', sans-serif;
+}
+
+#app {
+    background-color: #d2dbc8;
+}

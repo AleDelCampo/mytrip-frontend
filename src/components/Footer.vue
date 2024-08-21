@@ -176,7 +176,7 @@ ul {
   .icon:hover {
 
     background-color: white;
-    border: 2px solid #0dcaf0;
+    border: 2px solid #4a5d5e;
     color: black;
 
     cursor: pointer;

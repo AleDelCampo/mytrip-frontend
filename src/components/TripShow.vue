@@ -1,10 +1,14 @@
 <template>
   <div>
-    <h1 v-if="trip">{{ trip.title }}</h1>
-    <p v-if="trip">{{ trip.description }}</p>
-    <div v-else>{{ error }}</div>
+    <div class="container">
+      <h1 v-if="trip">{{ trip.title }}</h1>
+      <p v-if="trip">{{ trip.description }}</p>
+      <div v-else>{{ error }}</div>
 
-    <div id="map" v-if="trip"></div>
+      <div class="mb-4">
+        <div id="map" v-if="trip"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -27,8 +31,9 @@ export default {
           throw new Error('Failed to fetch trip details');
         }
         const data = await response.json();
+        console.log('Trip data:', data); // Aggiungi questo per vedere i dati del trip
         this.trip = data;
-        this.$nextTick().then(() => {
+        this.$nextTick(() => {
           this.initMap();
         });
       } catch (error) {
@@ -42,29 +47,27 @@ export default {
         return;
       }
 
-      const apiKey = 'Cf1IzBcyaYOQVbv27Qm29CkFFZxlMK9w'; // Replace with your TomTom API key
+      const apiKey = 'Cf1IzBcyaYOQVbv27Qm29CkFFZxlMK9w';
 
-      // Initialize the map
-      const map = tt.map({
-        key: apiKey,
-        container: 'map',
-        center: [80.9838, 76.7275], // Center the map at a fixed location (e.g., Athens)
-        zoom: 4
-      });
+      if (!this.trip || !this.trip.stops || this.trip.stops.length === 0) {
+        console.error('No stops available for this trip.');
+        return;
+      }
 
-      // Log the map initialization
-      console.log('Map initialized');
+      console.log('Stops:', this.trip.stops); // Aggiungi questo per vedere i dati delle fermate
 
       const locations = this.trip.stops.map(stop => ({
         name: stop.location,
         position: [stop.longitude, stop.latitude]
       }));
 
-      // Log the locations
-      console.log('Locations:', locations);
-
       if (locations.length > 0) {
-        map.setCenter(locations[0].position);
+        const map = tt.map({
+          key: apiKey,
+          container: 'map',
+          center: locations[0].position,
+          zoom: 8
+        });
 
         locations.forEach(location => {
           new tt.Marker()
@@ -73,15 +76,13 @@ export default {
             .addTo(map);
         });
 
-        const route = new tt.Routing({ key: apiKey });
-        const coordinates = locations.map(location => location.position);
+        if (locations.length > 1) {
+          const route = new tt.Routing({ key: apiKey });
+          const coordinates = locations.map(location => location.position);
 
-        if (coordinates.length > 1) {
           route.calculateRoute({ waypoints: coordinates })
             .then(response => {
               const routeGeoJSON = response.toGeoJSON();
-              console.log('Route GeoJSON:', routeGeoJSON); // Log the route GeoJSON
-
               map.addLayer({
                 id: 'route',
                 type: 'line',
@@ -115,6 +116,6 @@ export default {
 #map {
   height: 500px;
   width: 100%;
-  border: 1px solid red; /* Temporarily added for debugging */
+  border-radius: 18px;
 }
 </style>
