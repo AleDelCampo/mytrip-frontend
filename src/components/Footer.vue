@@ -90,11 +90,11 @@ export default {
 
     <div class="container py-4">
       <h6 class="text-center mb-3">
-        Come avrai già capito, questa è la mia WebApp per Trips
+        Welcome in my Travels App!!
       </h6>
 
       <div id="copyright">
-        Copyright© 2024, Boolean®, Alessandro Del Campo.
+        Copyright© 2024, Alessandro Del Campo.
       </div>
     </div>
 

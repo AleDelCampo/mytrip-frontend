@@ -5,12 +5,26 @@
       <p v-if="trip">{{ trip.description }}</p>
       <div v-else>{{ error }}</div>
 
-      <div class="mb-4">
-        <div id="map" v-if="trip"></div>
+      <div v-if="trip">
+        <!-- Sezione per i giorni e le tappe -->
+        <div v-for="day in trip.days" :key="day.id" class="day-section">
+          <h2>Giorno {{ new Date(day.date).toLocaleDateString() }}</h2>
+          <ul>
+            <li v-for="stop in day.stops" :key="stop.id">
+              <strong>{{ stop.location }}</strong>
+            </li>
+          </ul>
+
+          <!-- Mappa per ogni giorno -->
+          <div class="mb-4">
+            <div :id="`map-day-${day.id}`" class="map"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -24,67 +38,71 @@ export default {
     this.fetchTripDetails();
   },
   methods: {
-    async fetchTripDetails() {
-      try {
-        const response = await fetch(`http://localhost:8000/api/trips/${this.$route.params.id}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch trip details');
-        }
-        const data = await response.json();
-        console.log('Trip data:', data); // Aggiungi questo per vedere i dati del trip
-        this.trip = data;
-        this.$nextTick(() => {
-          this.initMap();
-        });
-      } catch (error) {
-        this.error = error.message;
-        console.error('Error fetching trip details:', error);
+  async fetchTripDetails() {
+    try {
+      const response = await fetch(`http://localhost:8000/api/trips/${this.$route.params.id}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch trip details');
       }
-    },
-    initMap() {
-      if (typeof tt === 'undefined') {
-        console.error('TomTom Map library is not loaded.');
-        return;
+      const data = await response.json();
+      console.log('Trip data:', data); // Verifica i dati del viaggio
+      this.trip = data;
+      this.$nextTick(() => {
+        this.initMap();
+      });
+    } catch (error) {
+      this.error = error.message;
+      console.error('Error fetching trip details:', error);
+    }
+  },
+  initMap() {
+    if (typeof tt === 'undefined') {
+      console.error('TomTom Map library is not loaded.');
+      return;
+    }
+
+    const apiKey = 'Cf1IzBcyaYOQVbv27Qm29CkFFZxlMK9w';
+
+    if (!this.trip || !this.trip.days || this.trip.days.length === 0) {
+      console.error('No days available for this trip.');
+      return;
+    }
+
+    this.trip.days.forEach(day => {
+      if (!day.stops || day.stops.length === 0) {
+        console.warn(`No stops available for day ${day.id}`);
+      } else {
+        console.log(`Initializing map for day ${day.id} at ${day.stops[0].latitude}, ${day.stops[0].longitude}`);
       }
+    });
 
-      const apiKey = 'Cf1IzBcyaYOQVbv27Qm29CkFFZxlMK9w';
-
-      if (!this.trip || !this.trip.stops || this.trip.stops.length === 0) {
-        console.error('No stops available for this trip.');
-        return;
-      }
-
-      console.log('Stops:', this.trip.stops); // Aggiungi questo per vedere i dati delle fermate
-
-      const locations = this.trip.stops.map(stop => ({
-        name: stop.location,
-        position: [stop.longitude, stop.latitude]
-      }));
-
-      if (locations.length > 0) {
+    // Inizializza la mappa per ogni giorno
+    this.trip.days.forEach(day => {
+      if (day.stops && day.stops.length > 0) {
         const map = tt.map({
           key: apiKey,
-          container: 'map',
-          center: locations[0].position,
+          container: `map-day-${day.id}`,
+          center: [day.stops[0].longitude, day.stops[0].latitude],
           zoom: 8
         });
 
-        locations.forEach(location => {
+        day.stops.forEach(stop => {
           new tt.Marker()
-            .setLngLat(location.position)
-            .setPopup(new tt.Popup({ offset: 35 }).setHTML(`<h4>${location.name}</h4>`))
+            .setLngLat([stop.longitude, stop.latitude])
+            .setPopup(new tt.Popup({ offset: 35 }).setHTML(`<h4>${stop.location}</h4>`))
             .addTo(map);
         });
 
+        // Opzionale: aggiungi la rotta
+        const locations = day.stops.map(stop => [stop.longitude, stop.latitude]);
+
         if (locations.length > 1) {
           const route = new tt.Routing({ key: apiKey });
-          const coordinates = locations.map(location => location.position);
-
-          route.calculateRoute({ waypoints: coordinates })
+          route.calculateRoute({ waypoints: locations })
             .then(response => {
               const routeGeoJSON = response.toGeoJSON();
               map.addLayer({
-                id: 'route',
+                id: `route-${day.id}`,
                 type: 'line',
                 source: {
                   type: 'geojson',
@@ -104,17 +122,19 @@ export default {
               console.error('Error calculating route:', error);
             });
         }
-      } else {
-        console.log('No locations available to display on the map');
       }
-    }
-  },
+    });
+  }
+},
 };
 </script>
 
 <style scoped>
-#map {
-  height: 500px;
+.day-section {
+  margin-bottom: 20px;
+}
+.map {
+  height: 300px;
   width: 100%;
   border-radius: 18px;
 }
