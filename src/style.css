@@ -16,6 +16,12 @@
     font-family: 'Countryside', sans-serif;
 }
 
+h1, h5, .my-title {
+    font-family: 'Countryside', sans-serif;
+}
+
+
+
 #app {
     background-color: #d2dbc8;
 }

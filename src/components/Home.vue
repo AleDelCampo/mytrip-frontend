@@ -2,7 +2,7 @@
   <div class="jumbotron text-center text-white py-5 logo">
     </div>
     <div class="jumbotron text-center text-white py-5 my-bg">
-        <div class="container   ">
+        <div class="container">
             <h1 class="display-4">Welcome to MyTrips</h1>
             <p class="lead">Plan and share your amazing trips with ease!!</p>
         </div>

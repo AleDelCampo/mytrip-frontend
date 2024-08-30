@@ -4,13 +4,13 @@ export default {
 
   data() {
     return {
-      members: [
+      owners: [
         {
           nome: "Alessandro Del Campo",
         }
       ],
 
-      emails: [
+      contacts: [
         "alessandrodelcampo01@gmail.com"
       ],
 
@@ -40,14 +40,14 @@ export default {
         <div class="col">
 
           <div class="col-title">
-            Members
+            Owner
           </div>
 
           <div class="components">
             <ul>
-              <li v-for="member in members">  
+              <li v-for="owner in owners">  
                 <div class="name">
-                  {{ member.nome }}
+                  {{ owner.nome }}
                 </div>
               </li>
             </ul>
@@ -60,10 +60,10 @@ export default {
             Contact
           </div>
 
-          <div class="emails">
+          <div class="contacts">
             <ul>
-              <li v-for="email in emails">
-                {{ email }}
+              <li v-for="contact in contacts">
+                {{ contact }}
               </li>
             </ul>
           </div>
@@ -106,7 +106,7 @@ export default {
 #footer-title {
   font-size: 1.6em;
   font-weight: bold;
-
+  font-family: 'Countryside', sans-serif;
   margin-bottom: 20px;
 }
 
