@@ -7,5 +7,5 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 
-axios.defaults.baseURL = 'https://83c6-178-211-82-238.ngrok-free.app/api';
+axios.defaults.baseURL = 'http://localhost:8000/api';
 createApp(App).use(router).mount('#app')
