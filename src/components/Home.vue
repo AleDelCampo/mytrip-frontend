@@ -12,7 +12,7 @@
       <div v-for="trip in trips" :key="trip.id" class="col-md-4">
         <div class="card mb-4 card-bg">
           <div v-if="trip.image">
-            <img :src="`http://camper4fourdev-d4dcbf2bd931.herokuapp.com/storage/${trip.image}`" class="card-img-top img-card" :alt="trip.title">
+            <img :src="`https://camper4fourdev-d4dcbf2bd931.herokuapp.com/storage/${trip.image}`" class="card-img-top img-card" :alt="trip.title">
           </div>
           <div class="card-body">
             <h5 class="card-title">{{ trip.title }}</h5>
@@ -39,7 +39,7 @@ export default {
   methods: {
     async fetchTrips() {
       try {
-        const response = await fetch('http://camper4fourdev-d4dcbf2bd931.herokuapp.com/api/trips');
+        const response = await fetch('https://camper4fourdev-d4dcbf2bd931.herokuapp.com/api/trips');
         if (!response.ok) {
           throw new Error('Failed to fetch trips');
         }
