@@ -259,7 +259,7 @@ export default {
     // Fetch dei dettagli del viaggio
     async fetchTripDetails() {
       try {
-        const response = await fetch(`http://localhost:8000/api/trips/${this.$route.params.id}`);
+        const response = await fetch(`http://camper4fourdev-d4dcbf2bd931.herokuapp.com/api/trips/${this.$route.params.id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch trip details'); // Errore nella fetch dei dettagli del viaggio
         }
@@ -409,7 +409,7 @@ export default {
       try {
         stop.userRating = rating; // Imposta la valutazione
 
-        const response = await fetch(`http://localhost:8000/api/stops/${stop.id}/rate`, {
+        const response = await fetch(`http://camper4fourdev-d4dcbf2bd931.herokuapp.com/api/stops/${stop.id}/rate`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -432,7 +432,7 @@ export default {
     // Aggiunge una nota a uno "stop"
     async addNote(stopId) {
       try {
-        const response = await fetch(`http://localhost:8000/api/stops/${stopId}/notes`, {
+        const response = await fetch(`http://camper4fourdev-d4dcbf2bd931.herokuapp.com/api/stops/${stopId}/notes`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -457,7 +457,7 @@ export default {
     // Elimina una nota
     async deleteNote(noteId) {
       try {
-        const response = await fetch(`http://localhost:8000/api/notes/${noteId}`, {
+        const response = await fetch(`http://camper4fourdev-d4dcbf2bd931.herokuapp.com/api/notes/${noteId}`, {
           method: 'DELETE',
         });
 
