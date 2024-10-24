@@ -39,7 +39,10 @@ export default {
   methods: {
     async fetchTrips() {
       try {
-        const response = await fetch('https://camper4fourdev-d4dcbf2bd931.herokuapp.com/api/trips');
+        const response = await fetch('https://camper4fourdev-d4dcbf2bd931.herokuapp.com/api/trips', {
+    method: 'GET',
+    mode: 'no-cors'
+});
         if (!response.ok) {
           throw new Error('Failed to fetch trips');
         }
